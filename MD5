@@ -1,4 +1,4 @@
-c0bf5bbb3cd553b84a56a401f81d5dee *DESCRIPTION
+2fec3d89fa448866e645410bd8d13e11 *DESCRIPTION
 b8dadc1e0f9ea0baacff9376571dc913 *NAMESPACE
 e8a4c35dbc8ccdac0eb62c375e129123 *R/ees.R
 a3dbc0034535b49ee6f883bd71ae4164 *R/inference.Ecar.R
@@ -10,12 +10,10 @@ d77e58e952fa2f581111406841778a85 *R/remap.event.reindex.R
 c805721ada3e90ca95afbd3ef9dedf26 *data/StockPriceReturns.rda
 5ffeefe30c983eeb3a703da1b4440988 *data/eesData.rda
 9e1db0a5f77c07496a163042cfd2e520 *data/inr.rda
-8e2ec5d6b5ee971444daabeb92f54af9 *inst/CITATION
-7bff35edcb748926b4e28ecc20b844a6 *inst/ChangeLog
-d7162874e0a96122d10ab61c9aadbc46 *inst/doc/ees.Rnw
-4af081760474f69626178e255ae8f403 *inst/doc/ees.pdf
-02d388630e34e578ac516fb17c3e6f1a *inst/doc/eventstudies.Rnw
-8d2181455e6b9eb8ea7fa36d66a3f56e *inst/doc/eventstudies.pdf
+ef347c78c5fa50637bdf7c9e8a3125b8 *inst/doc/ees.Rnw
+607aebefb55533da12ceaa0364e33f52 *inst/doc/ees.pdf
+b1b38cba039d5f0e740e5541310b9f17 *inst/doc/eventstudies.Rnw
+18c7c7b297adb41feb6afa51e52503fc *inst/doc/eventstudies.pdf
 db99665e2dd59de0dde4d29473d39116 *man/SplitDates.Rd
 5f44860aa50c136e3a213b432e71772f *man/StockPriceReturns.Rd
 d3bd5a7686b8222dab8395f12d47daf4 *man/ees.Rd
@@ -31,6 +29,6 @@ b8fccfdb8438c2e9ef2fb81546f4896c *man/remap.cumprod.Rd
 9e1db0a5f77c07496a163042cfd2e520 *tests/data/inr.rda
 ea0d859fe8fd005188e410fdbb70a09f *tests/inr_inference.R
 bdab4e514e2706ecfeb711e5f8e0011b *tests/test_eventstudy.R
-d7162874e0a96122d10ab61c9aadbc46 *vignettes/ees.Rnw
-02d388630e34e578ac516fb17c3e6f1a *vignettes/eventstudies.Rnw
+ef347c78c5fa50637bdf7c9e8a3125b8 *vignettes/ees.Rnw
+b1b38cba039d5f0e740e5541310b9f17 *vignettes/eventstudies.Rnw
 55e6a00521f8408031b136fa56f597ec *vignettes/eventstudies.bib

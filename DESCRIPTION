@@ -1,7 +1,7 @@
 Package: eventstudies
 Type: Package
 Title: Event study and extreme event analysis
-Version: 1.0
+Version: 1.1
 Date: 2013-04-02
 Author: Ajay Shah, Vimal Balasubramaniam, Vikram Bahure
 Maintainer: Vikram Bahure <economics.vikram@gmail.com>
@@ -10,7 +10,7 @@ Description: Implementation of short and long term event study
         methodology
 License: GPL-2
 LazyLoad: yes
-Packaged: 2013-05-06 06:54:26 UTC; ripley
+Packaged: 2013-05-08 10:27:14 UTC; vikram
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-05-06 08:57:27
+Date/Publication: 2013-05-08 15:39:06
