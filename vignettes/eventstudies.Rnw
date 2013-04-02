@@ -1,0 +1,179 @@
+
+\documentclass[a4paper,11pt]{article}
+\usepackage{graphicx}
+\usepackage{a4wide}
+\usepackage[colorlinks,linkcolor=blue,citecolor=red]{hyperref}
+\usepackage{natbib}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{parskip}
+\usepackage{amsmath}
+\title{Introduction to the \textbf{eventstudies} package in R}
+\author{Ajay Shah, Vimal Balasubramaniam and Vikram Bahure}
+\begin{document}
+%\VignetteIndexEntry{eventstudies: A package with functionality to do Event Studies}
+%\VignetteDepends{}
+%\VignetteKeywords{event studies}
+%\VignettePackage{eventstudies}
+\maketitle
+\begin{abstract}
+The structure of the package and its implementation of event study
+methodology is explained in this paper. In addition to converting
+physical dates to event time frame, functions for re-indexing the
+event time returns and bootstrap inference estimation. The methods and
+functions are elucidated by employing data-set of SENSEX firms. 
+\end{abstract}
+
+\SweaveOpts{engine=R,pdf=TRUE}
+\section{Introduction}
+Event study has a long history which dates back to 1938
+\citep{dolley1938effect}. It is mostly used to study the response of
+stock price or value of a firm due to events such as mergers \&
+acquisitions,  stock splits, quarterly results and so on.  It is one
+of the most widely used statistical tool.  
+
+Event study is used to study the response or
+the effect on a variable, due to similar events. Efficient and liquid
+markets are basic assumption in this methodology. It assumes the
+effect on response variable is without delay. As event study output is
+further used in econometric analysis, hence significance test such as
+\textit{t-test}, \textit{J-test}, \textit{Patell-test} which are
+parametric and \textit{GRANK}, \textit{RANK} which are non-parametric
+can also be performed. 
+
+In this package, there are three major functions
+\textit{phys2eventtime}, \textit{remap.cumsum} and
+\textit{inference.Ecar}. \textit{phys2eventtime} changes the
+physical dates to event time frame on which event study analysis can
+be done with ease. \textit{remap.cumsum}
+can be used to convert returns to cumulative sum or product in the
+event time frame. \textit{inference.Ecar} generates bootstrap
+inference for the event time response of the variable. 
+
+In the section below, we illustrate event study analysis using the
+package. We measure the impact of stock splits on the stock price of
+the firm for SENSEX index constituents.
+
+\section{Performing Eventstudy analysis}
+To measure the impact of stock splits on the stock price of the firm,
+we create a dataset of 30 index companies of Bombay Stock Exchange
+(BSE). We have a returns of stock price for each firm from 2001 to
+2013 and respective stock splits date. Once we have the data then we
+use following steps to perform event study analysis using the package.
+
+\begin{enumerate}
+\item Construction of data set
+  \begin{itemize}
+  \item A time series object of stock price returns
+  \item Event dates object with 2 columns, \textit{unit} and
+    \textit{when}.
+  \end{itemize}
+  \item Converting physical dates to event frame
+  \item Remapping event frame
+  \item Estimating bootstrap inference
+\end{enumerate}
+
+\subsection{Construction of data set}
+% Stock returns and event dates
+We have collected data of index constituents of Bombay stock exchange
+(BSE) and corresponding stock splits dates. There are 30
+firms in SENSEX and we have stock split dates for each firm from 2000
+onwards. 
+
+A time series \textit{zoo} object is created for stock price returns
+for 30 firms. For event dates, a data frame with two columns
+\textit{unit} and \textit{when} is formed. \textit{unit} has name of
+the response series (firm name as in column name of time series
+object) along with event date in \textit{when}. \textit{unit} should
+be in \textit{character} format and \textit{when} in \textit{Date} format.
+
+<<>>=
+library(eventstudies)
+data(StockPriceReturns)
+str(StockPriceReturns)
+data(SplitDates)
+head(SplitDates)
+@ 
+
+\subsection{Converting physical dates to event frame}
+After the formation of the dataset, our first step towards event study
+analysis is to convert the physical dates to event time
+frame.  Using the \textit{phys2eventtime} function we convert the
+dates in event time frame. 
+
+Here, we index the stock split date, stock price returns to day 0 and
+similarly post event dates are indexed to positive and pre event
+dates are indexed as negative. As we can see below the stock split dates
+for BHEL, Bharti Airtel and Cipla are indexed to day 0.
+
+The output for \textit{phys2eventtime} is a list. The first element of
+a list is a time series object which is converted to event 
+time and the second element is \textit{outcomes} which shows if there
+was any \textit{NA} in the dataset. If the outcome is \textit{success}
+then all is well in the given window as specified by the
+width. It gives \textit{wdatamissing} if there are too many \textit{NAs} within the crucial event
+window or \textit{wrongspan} if the event date is not placed within 
+the span of data for the unit or \textit{unitmissing} if a unit named
+in events is not in \textit{z}.
+
+<<>>=
+es <- phys2eventtime(z=StockPriceReturns, events=SplitDates, width=10)
+es.w <- window(es$z.e, start=-10, end=10)
+SplitDates[1:3,]
+StockPriceReturns[SplitDates[1,2],SplitDates[1,1]]
+StockPriceReturns[SplitDates[2,2],SplitDates[2,1]]
+StockPriceReturns[SplitDates[3,2],SplitDates[3,1]]
+es.w[,1:3]
+@ 
+
+\subsection{Remapping event frame}
+In event study analysis the variable of interest is cumulative
+returns. The \textit{remap.cumsum} function is used to
+convert the returns to cumulative returns.
+<<>>=
+es.cs <- remap.cumsum(es.w,is.pc=FALSE,base=0)
+es.cs[,1:3]
+@ 
+
+\subsection{Bootstrap inference}
+After converting to event frame and estimating the interest variable,
+we need to check the stability of the result and derive other
+estimates like standard errors and confidence intervals. For this,
+we generate the sampling distribution for the estimate using bootstrap
+inference. A detailed explanation of the methodology is presented in
+Patnaik, Shah and Singh (2013).
+This specific approach used here is based on
+\citet{davison1986efficient}. The \textit{inference.Ecar} function
+does the bootstrap to generate distribution of $\bar{CR}$. The
+bootstrap generates confidence interval at 2.5\% and 97.5\% for the estimate.
+
+<<>>=
+result <- inference.Ecar(z.e=es.cs, to.plot=TRUE)
+@ 
+\begin{figure}[t]
+  \begin{center}
+    \caption{Stock splits event and response of respective stock returns}
+    \setkeys{Gin}{width=0.8\linewidth}
+    \setkeys{Gin}{height=0.8\linewidth}
+<<label=fig1,fig=TRUE,echo=FALSE>>=
+<<fig1plot>>
+  result <- inference.Ecar(z.e=es.cs, to.plot=TRUE)
+@
+\end{center}
+\label{fig:one}
+\end{figure}
+
+
+\section{Computational details}
+The package code is purely written in R. It has dependencies to zoo
+(\href{http://cran.r-project.org/web/packages/zoo/index.html}{Zeileis
+  2012}) and boot
+(\href{http://cran.r-project.org/web/packages/boot/index.html}{Ripley
+  2013}).  R itself as well as these packages can be obtained from \href{http://CRAN.R-project.org/}{CRAN}.
+%\section{Acknowledgments}
+
+%\newpage
+\bibliographystyle{jss}
+\bibliography{eventstudies}
+
+\end{document}
