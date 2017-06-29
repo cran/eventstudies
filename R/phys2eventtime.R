@@ -1,10 +1,8 @@
-library(zoo)
-
-# Upon input
+# Upon input   
 #   z is a zoo object containing input data. E.g. this could be all the 
 #     prices of a bunch of stocks. The column name is the unit name.
 #   events is a data.frame containing 2 columns. The first column
-#     ("unit") is the name of the unit. The second column is the date/time
+#     ("name") is the name of the unit. The second column is the date/time
 #     ("when") when the event happened.
 # For each event, the outcome can be:
 #   unitmissing : a unit named in events isn't in z
@@ -12,49 +10,51 @@ library(zoo)
 #   wdatamissing: too many NAs within the crucial event window.
 #   success : all is well.
 # A vector of these outcomes is returned.
-phys2eventtime <- function(z, events, width=10) {
-  # Just in case events$unit has been sent in as a factor --
-  events$unit <- as.character(events$unit)
-  if(is.factor(events$when)) stop("Sorry you provided a factor as an index")
-  # Given a zoo time-series vector x, and an event date "when",
-  # try to shift this vector into event time, where the event date
-  # becomes 0 and all other dates shift correspondingly.
-  # If this can't be done, then send back NULL with an error code.
-  timeshift <- function(x, when) {
-    location <- findInterval(when, index(x))
-    if ((location <= 1) | (location >= length(x))) {
-      return(list(result=NULL, outcome="wrongspan"))
-    }
-    remapped <- zoo(as.numeric(x), order.by=(-location+1):(length(x)-location))
-    list(result=remapped, outcome="success")
-  }
 
-  # Main loop to build up a data object in event time --
-  outcomes <- character(nrow(events))
-  z.e <- zoo(1, order.by=as.integer(1)) # zoo::cbind() requires initialising z.e
-  for (eventnum in 1:nrow(events)) {
-    if (!(events$unit[eventnum] %in% colnames(z))) {
-      outcomes[eventnum] <- "unitmissing"
-      next
-    }
-    attempt <- timeshift(z[,events$unit[eventnum]], events$when[eventnum])
-    if (attempt$outcome=="success") {
-      z.e <- cbind(z.e, attempt$result)
-    }
-    outcomes[eventnum] <- attempt$outcome
+phys2eventtime <- function(z, events, width=10) {
+
+  stopifnot(width > 0)
+  stopifnot(class(events)=="data.frame")
+  stopifnot(any(class(z) %in% "zoo") || any(class(z) %in% "xts"))
+ 
+ if (is.null(ncol(z))) {
+   stop(paste("'z' should be of class zoo/xts with at least one column. Use '[' with drop = FALSE"))
+ }
+ if (!any(class(events$when) %in% c("POSIXt", "Date"))) {
+   stop("events$when should be one of 'Date' or 'date-time' classes.")
+ }
+ if (any(is.na(events$when))) {
+   stop("events$when should not contain NA values.")
+ }
+ if (any(is.na(events$name))) {
+   stop("events$name should not contain NA values.")
+ }
+ 
+ if (!is.character(events$name)) {
+   stop("events$name should a character class.")
+ }
+
+ answer <- lapply(1:nrow(events), function(i) timeshift(events[i, ], z, width))
+ outcomes <- sapply(answer, function(x) x$outcome)
+ z.e <- do.call(cbind, lapply(answer[outcomes == "success"], function(x) x$result))
+ 
+  ## If no successful outcome, return NULL to z.e. 
+ if (length(z.e) == 0) {               
+   return(list(z.e = NULL, outcomes = factor(outcomes)))
   }
-  outcomes <- outcomes
-  z.e <- z.e[,-1, drop = FALSE]                       #get rid of that junk initialisation
-  colnames(z.e) <- which(outcomes=="success")
-  ## Now worry about whether there's information within the event window
-  ## (This entire cleaning+checking can be switched off by specifying width=0)
+ 
+  colnames(z.e) <- which(outcomes == "success")
+  ## :DOC
+  events.attrib <- do.call(c, lapply(answer[outcomes == "success"], function(x) x$event))
+  ## class(events.attrib) <- class(events$when)
+
+  ## Information verification within 'width'
+  ##   :: Will not be executed with width = 0
   badcolumns <- NULL
   if (width > 0) {
     for (i in 1:ncol(z.e)) {
       tmp <- z.e[,i]
-      tmp <- na.locf(tmp, na.rm=FALSE, maxgap=4)
-      tmp <- na.locf(tmp, na.rm=FALSE, maxgap=4, fromLast=TRUE)
-      tmp2 <- window(tmp, start=-width, end=+width)
+      tmp2 <- window(tmp, start = (-width + 1), end = +width)
       if (any(is.na(tmp2))) {
         outcomes[as.numeric(colnames(z.e)[i])] <- "wdatamissing"
         badcolumns <- c(badcolumns, i)
@@ -63,10 +63,33 @@ phys2eventtime <- function(z, events, width=10) {
       }
     }
     if (any(outcomes == "wdatamissing")) {
-      z.e <- z.e[, -badcolumns]
+      z.e <- z.e[, -badcolumns, drop = FALSE]
+      events.attrib <- events.attrib[-badcolumns]
+    }
+    if (NCOL(z.e) == 0) {
+      return(list(z.e = NULL, outcomes = factor(outcomes)))
     }
   }
-  # Check that we're okay
+
+  ## Double check
   stopifnot(sum(outcomes=="success") == NCOL(z.e))
-  list(z.e=z.e, outcomes=factor(outcomes))
+  list(z.e=z.e, outcomes=factor(outcomes), events = events.attrib) # :DOC: events.attrib
+}
+
+timeshift <- function(x, z, width) {
+  firm.present <- x[, "name"] %in% colnames(z)
+  if (!firm.present) {
+    return(list(result=NULL, outcome="unitmissing"))
+  }
+
+  ## Take previous date if exact data is not found.
+  location <- findInterval(x[, "when"], index(z[, x[, "name"]]))
+  if ((location <= (width - 1)) ||      # testing upper bound
+      (location > (length(index(z)) - width))) { # lower bound
+    return(list(result=NULL, outcome="wrongspan"))
+  }
+
+  remapped <- zoo(as.numeric(z[, x[, "name"]]),
+                  order.by = (-location + 1):(length(z[, x[, "name"]]) - location))
+  return(list(result = remapped, outcome = "success", event = index(z)[location]))
 }

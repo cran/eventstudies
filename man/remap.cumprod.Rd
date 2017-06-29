@@ -1,33 +1,53 @@
 \name{remap.cumprod}
 \alias{remap.cumprod}
 
-\title{Returns geometric returns.}
+\title{Cumulative geometric values}
 
-\description{This function returns the geometric returns for a given zoo object.}
+\description{This function computes the cumulative geometric values for a given
+  \pkg{zoo} object.}
 
-\usage{remap.cumprod(z, is.pc = TRUE, is.returns = TRUE, base = 100)}
+\usage{
+   remap.cumprod(z, is.pc = FALSE, is.returns = TRUE, base = 100)
+}
 
 \arguments{
-  \item{z}{z is the zoo object returned from phys2eventtime.}
+  \item{z}{a \pkg{zoo} object indexed by event time, typically by the
+    \dQuote{z.e} component obtained from \dQuote{phys2eventtime}
+    function.}
 
-  \item{is.pc}{Logical flag if input is a percentage.}
+  \item{is.pc}{\sQuote{logical}, whether input is a percentage. Default
+  value set to \sQuote{FALSE}.}
 
-  \item{is.returns}{Logical flag if input is returns.}
+  \item{is.returns}{\sQuote{logical}, whether input is a returns series.}
 
-  \item{base}{The base for the cumulative product.}
+  \item{base}{an integer specifying the base for cumulative product.}
 }
 
-\value{The frame returned has each column replaced by base * the cumulative product of the column.}
+\value{A \pkg{zoo} object with the cumulative product for each series,
+  representing a buy-hold return estimate.
+}
+
 
 \seealso{
-phys2eventtime
+ \code{\link{phys2eventtime}}
 }
+
+\author{Chirag Anand, Vikram Bahure, Vimal Balasubramaniam}
 
 \examples{
 data(StockPriceReturns)
 data(SplitDates)
-es.results <- phys2eventtime(z=StockPriceReturns, events=SplitDates,width=5)
-es.w <- window(es.results$z.e, start=-5, end=+5)
-eventtime <- remap.cumprod(es.w, is.pc=FALSE, is.returns=TRUE, base=0)
+
+es.results <- phys2eventtime(z = StockPriceReturns,
+                             events = SplitDates,
+                             width = 5)
+es.w <- window(es.results$z.e, start = -5, end = +5)
+
+eventtime <- remap.cumprod(es.w,
+                           is.pc = TRUE,
+                           is.returns = TRUE,
+                           base = 100)
+
+print(eventtime[as.character(-3:3), ])
 }
 

@@ -1,20 +1,14 @@
 \name{StockPriceReturns}
-
+\alias{StockPriceReturns}
 \docType{data}
 
-\alias{StockPriceReturns}
+\title{Stock price returns data}
 
-\title{It is the data-set used for event-study analysis.}
-
-\description{
-It has stock price returns for index constituents of Bombay Stock Exchange (BSE).
-}
+\description{This data set contains stock price returns (in per cent) of
+  30 major stocks on the National Stock Exchange (NSE) of India.}
 
 \usage{data(StockPriceReturns)}
 
-\format{An object with class attributes \code{zoo} containing resposne series for eventstudy.}
+\author{Vikram Bahure}
 
-\examples{
-    data(StockPriceReturns)
-}
 \keyword{datasets}

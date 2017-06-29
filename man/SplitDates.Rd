@@ -1,20 +1,17 @@
 \name{SplitDates}
-
+\alias{SplitDates}
 \docType{data}
 
-\alias{SplitDates}
+\title{Data set of events used to perform event study analysis}
 
-\title{It is the data-set used for event-study analysis.}
-
-\description{
-It has stock split event dates for the BSE index firms with two columns 'unit' which has firm names and 'when' which has event date for the firm.
-}
+\description{This data set contains stock split event dates for the index
+  constituents of the Bombay Stock Exchange index (SENSEX). The data
+  format follows the required format in the function
+  \code{phys2eventtime}, with two columns 'outcome.unit' (firm name) and
+  'event.when' (stock split date).}
 
 \usage{data(SplitDates)}
 
-\format{An object with class attributes \code{zoo} containing resposne series for eventstudy and a data frame with stock split event dates.}
+\author{Vikram Bahure}
 
-\examples{
-    data(SplitDates)
-}
 \keyword{datasets}
