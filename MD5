@@ -1,5 +1,5 @@
 45e28c37f3f809bf21b82dd485413302 *CHANGELOG
-30baed1f4d4378a377d1c288e6cbb8f5 *DESCRIPTION
+6bc04908e2592f54a20ac4d03ba51ec3 *DESCRIPTION
 0dd746177b44f9908cfde1b7fafc8d03 *NAMESPACE
 0228a80021a7ec06ff7af3530aefaf1d *R/constantMeanReturn.R
 089df86bca02e1d12682fcb0fcbaf486 *R/eesInference.R
@@ -15,9 +15,9 @@ b0bf1aa4843234e58ba48c1eb8abd54c *R/lmAMM.R
 1dadddaa0c170a492ef181b86c512a64 *R/remap.cumprod.R
 38be41b8cc67aa4cbdb76acec814c0d1 *R/remap.cumsum.R
 9958cf64f571ad058c6a55e0630e4666 *R/remap.event.reindex.R
-89ea3c4ddd305954ebbe263b9c76626b *README.md
-4b57989ccba79d77f9c94c6971fb6dda *build/partial.rdb
-d5e6b6eb353c3631a83adfe486e6b771 *build/vignette.rds
+498871c1fddf6e5dfcbaa2d16685f02f *README.md
+26c343f884520b67cd52a970b5ad5d19 *build/partial.rdb
+521b12e7b07ccefe512eb10ec71cd897 *build/vignette.rds
 3845cfd35948cea9d729922780ce09fb *data/AggregateReturns.rda
 c8886c8d6c8db9c91e6b86e86386ddee *data/IndexReturns.rda
 7ab74eb2c383e248dd779fc4c023a9f8 *data/KGEarningsDates.rda
@@ -31,12 +31,12 @@ be24bbce0d5f6fdcef055b3cae1b7a72 *data/StockPriceReturns.rda
 907434e144b01d6a696813b85933e3de *data/TerrorAttack.rda
 a4197969e4a5c070b22538b0197e959f *data/TerrorIndiceReturns.rda
 f151bfd1bbdc49291c6cce5f606cd519 *inst/CITATION
-38e3af059b0beff46d8eef49df6155ed *inst/doc/eventstudies.R
-abeb4f8c711503301a9187f36c85cc78 *inst/doc/eventstudies.Rnw
-d0f70ce4ba5b902e209a0d6dfd2205ab *inst/doc/eventstudies.pdf
+f2e8829314252064a884cdef05190253 *inst/doc/eventstudies.R
+b25d7574fbb26fad38842f40c61e1bb7 *inst/doc/eventstudies.Rnw
+8b2685ccc312be08d00511ecd9dba994 *inst/doc/eventstudies.pdf
 61e64b79355dc382f4740ad633771356 *inst/doc/replications.R
-603accc995be078147070ee51188d98c *inst/doc/replications.Rnw
-47ba67e6a7b937181c3a06c0e791f97f *inst/doc/replications.pdf
+d1fe1e60bf5f693bbb7b9e82688a87e0 *inst/doc/replications.Rnw
+71b98ebdcd275010192432ae5a1c61b3 *inst/doc/replications.pdf
 7f6aab15e7eb1c488c496a8464ae446f *inst/tests/doc/test_compilation.txt
 381ec95c9473ce19db9a11cb00b8d77b *inst/tests/doc/tests.txt
 c76544696205307a2a7c7d6c921df3bc *inst/tests/test_functionality_constantMeanReturn.R
@@ -64,7 +64,7 @@ b89234c5d726ca1af5cd877c3ac735c2 *man/KGEarningsDates.Rd
 a38110e8e393d1a5e556e96c81e4faad *man/eesDates.Rd
 b2d332a917c067cf6d5b647a0b89d159 *man/eesInference.Rd
 4bd697efdb09e369996494ea3c67c304 *man/eesSummary.Rd
-176f547b8ca406346db433dd840a8561 *man/eventstudies-package.Rd
+50537bd9981111e3e1b24e20504bf95f *man/eventstudies-package.Rd
 0f22c34f14eeeade8eb4b42c2c22e505 *man/eventstudy.Rd
 37904d5b2fbe2af73c707cc8064e4f6b *man/excessReturn.Rd
 128746aae373b63d9e8a936299b601c3 *man/get.clusters.formatted.Rd
@@ -82,6 +82,6 @@ b72d93574309bcd2eadd44e0e19d6528 *man/remap.event.reindex.Rd
 42bbd1a830294b76510706d20db6d05d *man/subperiod.lmAMM.Rd
 9e1db0a5f77c07496a163042cfd2e520 *tests/data/inr.rda
 c84c7ace5c9243cdbf761508f832e2fb *tests/test-all.R
-abeb4f8c711503301a9187f36c85cc78 *vignettes/eventstudies.Rnw
+b25d7574fbb26fad38842f40c61e1bb7 *vignettes/eventstudies.Rnw
 af91eddcb1d8c056cbf2e1d7984e3f82 *vignettes/eventstudies.bib
-603accc995be078147070ee51188d98c *vignettes/replications.Rnw
+d1fe1e60bf5f693bbb7b9e82688a87e0 *vignettes/replications.Rnw

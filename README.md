@@ -7,15 +7,44 @@ methodological research on event studies.
 
 ## Installation
 
+### Stable version
+**Release notes**: https://github.com/nipfpmf/eventstudies/releases/tag/v1.2
 ```R
-library(devtools)
-install_github("nipfpmf/eventstudies")
+install.packages("eventstudies")
+## OR
+devtools::install_github("nipfpmf/eventstudies", ref="v1.2")
+```
+
+### Latest version
+```R
+devtools::install_github("nipfpmf/eventstudies", ref="master")
 ```
 
 ## Usage
 
 ```R
-library(eventstudies)
+data("SplitDates", package = "eventstudies")
+data("StockPriceReturns", package = "eventstudies")
+data("OtherReturns", package = "eventstudies")
+
+es <- eventstudies::eventstudy(firm.returns = StockPriceReturns,
+         event.list = SplitDates,
+         event.window = 7,
+         type = "marketModel",
+         to.remap = TRUE,
+         remap = "cumsum",
+         inference = TRUE,
+         inference.strategy = "bootstrap",
+         model.args = list(
+             market.returns = OtherReturns[, "NiftyIndex"]
+             )
+         )
+plot(es)
+```
+
+## Help
+```R
+?eventstudy
 vignette("eventstudies", package = "eventstudies")
 examples("eventstudy", package = "eventstudies")
 ```
@@ -26,7 +55,7 @@ examples("eventstudy", package = "eventstudies")
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
+5. Submit a pull request
 
 ## History
 
