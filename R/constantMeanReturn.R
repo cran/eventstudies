@@ -1,6 +1,6 @@
 constantMeanReturn <- function(firm.returns, residuals = TRUE) {
     
-    stopifnot(class(firm.returns) == "zoo" || class(firm.returns) == "xts")
+    stopifnot("zoo" %in% class(firm.returns) || "xts" %in% class(firm.returns))
                                          # Single firm
     if (NCOL(firm.returns) == 1) {
                                         # Compute constant mean over
@@ -17,7 +17,6 @@ constantMeanReturn <- function(firm.returns, residuals = TRUE) {
         constantMean <- list()
         resids <- list()
         for (i in 1:NCOL(firm.returns)) {
-            cat("i:", i, "\n")
             constantMean[[i]] <- mean(firm.returns[ , i],
                                       na.rm = TRUE)
             if (residuals == TRUE) {

@@ -1,11 +1,11 @@
-## ----terrorism-example---------------------------------------------------
+## ----terrorism-example--------------------------------------------------------
                                      # For each market with 
                                      # different time zones
 library(eventstudies)
 data(TerrorIndiceReturns)
 data(TerrorAttack)
 
-## ----terrorism-example2--------------------------------------------------
+## ----terrorism-example2-------------------------------------------------------
 
 TerrorIndiceCAR <- lapply(1: ncol(TerrorIndiceReturns), function(x){
 
@@ -39,7 +39,7 @@ TerrorIndiceCAR[11, ]
                                         # 6-day CAR
 TerrorIndiceCAR[6, ]
 
-## ----earnings-example----------------------------------------------------
+## ----earnings-example---------------------------------------------------------
   
                                         # For each market with 
                                         # different time zones
@@ -47,7 +47,7 @@ data(KGStockReturns)
 data(KGMarketReturns)
 data(KGSurpriseCategory)
 
-## ----earnings-example2---------------------------------------------------
+## ----earnings-example2--------------------------------------------------------
 es.categories <- function(stock, market, surprise, option){
                                         # Categorising returns for                                                                               
                                         # each category    
